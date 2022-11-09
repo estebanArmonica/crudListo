@@ -1,0 +1,19 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Lista</ion-title>
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['/agregar']">Agregar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let g of barajas; let indeArray = index" [routerLink]="['/detalle', g.id]">
+      <ion-label>{{ g.nombre }}</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

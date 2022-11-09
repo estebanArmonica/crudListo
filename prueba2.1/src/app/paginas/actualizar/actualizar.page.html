@@ -1,0 +1,82 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Actualizar Producto</ion-title>
+    <ion-buttons slot="end">
+      <ion-back-button [routerLink]="['/listar']">Volver</ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form>
+    <!-- nombre -->
+    <ion-item lines="full">
+      <ion-label position="floating">Nombre Carta</ion-label>
+      <ion-input type="text" name="txNombre" [(ngModel)]="gwentActua.nombre" required></ion-input>
+    </ion-item>
+
+    <!-- tipo de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">Tipo Carta</ion-label>
+      <ion-input type="text" name="txTipoCarta" [(ngModel)]="gwentActua.tipoCarta" required></ion-input>
+    </ion-item>
+
+    <!-- nivel de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">Nivel de la carta</ion-label>
+      <ion-input type="number" name="txNivelCarta" [(ngModel)]="gwentActua.nivel" required></ion-input>
+    </ion-item>
+
+    <!-- costo de creacion de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">Costo de creacion de Carta</ion-label>
+      <ion-input type="number" name="txCostoCreacion" [(ngModel)]="gwentActua.costoCreacion" required></ion-input>
+    </ion-item>
+
+    <!-- descripcion de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">descripcion</ion-label>
+      <ion-input type="text" name="txDescripcion" [(ngModel)]="gwentActua.descripcion" required></ion-input>
+    </ion-item>
+
+    <!-- genero de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">Genero de la carta</ion-label>
+      <ion-input type="text" name="txGenero" [(ngModel)]="gwentActua.genero" required></ion-input>
+    </ion-item>
+
+    <!-- habilidad de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">Habilidad de Carta</ion-label>
+      <ion-input type="text" name="txHabilidadCarta" [(ngModel)]="gwentActua.habilidad" required></ion-input>
+    </ion-item>
+
+    <!-- disponible de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">disponible en</ion-label>
+      <ion-input type="text" name="txDisponibleCarta" [(ngModel)]="gwentActua.disponible" required></ion-input>
+    </ion-item>
+
+    <!-- imagen de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">Imagen</ion-label>
+      <ion-input type="file" name="txImagenCarta" [(ngModel)]="gwentActua.imagen" required></ion-input>
+    </ion-item>
+
+    <!-- tipo de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">Precio</ion-label>
+      <ion-input type="number" name="txPrecioCarta" [(ngModel)]="gwentActua.precio" required></ion-input>
+    </ion-item>
+
+    <!-- boton de agregar datos -->
+    <ion-row>
+      <ion-col>
+        <ion-button (click)="actualizaGwent()" expand="block" color="primary">Actualizar</ion-button>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-content>

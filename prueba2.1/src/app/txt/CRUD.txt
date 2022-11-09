@@ -1,0 +1,784 @@
+-- actualizar
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Cambiar Carta</ion-title>
+    <ion-buttons slot="end">
+      <ion-back-button [routerLink]="['/lista-gwent']">Volver</ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form>
+    <!-- nombre -->
+    <ion-item lines="full">
+      <ion-label position="floating">Nombre Carta</ion-label>
+      <ion-input type="text" name="txNombre" [(ngModel)]="gwentActua.nombre" required></ion-input>
+    </ion-item>
+
+    <!-- tipo de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">Tipo Carta</ion-label>
+      <ion-input type="text" name="txTipoCarta" [(ngModel)]="gwentActua.tipoCarta" required></ion-input>
+    </ion-item>
+
+    <!-- nivel de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">Nivel de la carta</ion-label>
+      <ion-input type="number" name="txNivelCarta" [(ngModel)]="gwentActua.nivel" required></ion-input>
+    </ion-item>
+
+    <!-- costo de creacion de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">Costo de creacion de Carta</ion-label>
+      <ion-input type="number" name="txCostoCreacion" [(ngModel)]="gwentActua.costoCreacion" required></ion-input>
+    </ion-item>
+
+    <!-- descripcion de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">descripcion</ion-label>
+      <ion-input type="text" name="txDescripcion" [(ngModel)]="gwentActua.descripcion" required></ion-input>
+    </ion-item>
+
+    <!-- genero de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">Genero de la carta</ion-label>
+      <ion-input type="text" name="txGenero" [(ngModel)]="gwentActua.genero" required></ion-input>
+    </ion-item>
+
+    <!-- habilidad de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">Habilidad de Carta</ion-label>
+      <ion-input type="text" name="txHabilidadCarta" [(ngModel)]="gwentActua.habilidad" required></ion-input>
+    </ion-item>
+
+    <!-- disponible de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">disponible en</ion-label>
+      <ion-input type="text" name="txDisponibleCarta" [(ngModel)]="gwentActua.disponible" required></ion-input>
+    </ion-item>
+
+    <!-- imagen de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">Imagen</ion-label>
+      <ion-input type="file" name="txImagenCarta" [(ngModel)]="gwentActua.imagen" required></ion-input>
+    </ion-item>
+
+    <!-- tipo de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">Precio</ion-label>
+      <ion-input type="number" name="txPrecioCarta" [(ngModel)]="gwentActua.precio" required></ion-input>
+    </ion-item>
+
+    <!-- boton de agregar datos -->
+    <ion-row>
+      <ion-col>
+        <ion-button (click)="actualizaGwent()" expand="block" color="primary">Actualizar</ion-button>
+      </ion-col>
+    </ion-row>
+
+
+
+  </form>
+</ion-content>
+
+-- actualiizar page.ts
+import { Component, OnInit } from '@angular/core';
+import { Route, Router } from '@angular/router';
+import { ApiGwentServiceService } from 'src/app/data/api-gwent-service.service';
+
+@Component({
+  selector: 'app-actualizar-gwent',
+  templateUrl: './actualizar-gwent.page.html',
+  styleUrls: ['./actualizar-gwent.page.scss'],
+})
+export class ActualizarGwentPage  {
+
+  ionViewWillEnter(){
+    this.GetGwentId(this.getIdFormURL())
+  }
+
+
+  gwentActua = {
+    id: 0,
+    nombre: "",
+    tipoCarta: "",
+    nivel: 0,
+    costoCreacion: 0,
+    descripcion: "",
+    genero: "",
+    habilidad: "",
+    disponible: "",
+    imagen: "",
+    precio: 0
+  }
+
+  constructor(private gwentserver: ApiGwentServiceService, private router: Router) { }
+
+
+  getIdFormURL(){
+    let url = this.router.url
+    let array = url.split("/",3)
+    let id = parseInt(array[2])
+    return id
+  }
+
+  GetGwentId(gwentActua: number){
+    this.gwentserver.getCartaId(gwentActua).subscribe(
+      (respuestID: any) =>{
+        this.gwentActua = {
+          id: respuestID[0].id,
+          nombre: respuestID[0].nombre,
+          tipoCarta: respuestID[0].tipoCarta,
+          nivel: respuestID[0].nivel,
+          costoCreacion: respuestID[0].costoCreacion,
+          descripcion: respuestID[0].descripcion,
+          genero: respuestID[0].genero,
+          habilidad: respuestID[0].habilidad,
+          disponible: respuestID[0].disponible,
+          imagen: respuestID[0].imagen,
+          precio: respuestID[0].precio
+        }
+      }
+    )
+  }
+
+  actualizaGwent(){
+    this.gwentserver.actualizarGwentCarta(this.gwentActua).subscribe()
+    this.router.navigateByUrl("/lista-gwent")
+  }
+
+}
+
+-- agregar
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Carta Nueva</ion-title>
+    <ion-buttons slot="end">
+      <ion-back-button [routerLink]="['/lista-gwent']">Volver</ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form>
+    <!-- nombre -->
+    <ion-item lines="full">
+      <ion-label position="floating">Nombre Carta</ion-label>
+      <ion-input type="text" name="txNombre" [(ngModel)]="newBarajaGwent.nombre" required></ion-input>
+    </ion-item>
+
+    <!-- tipo de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">Tipo Carta</ion-label>
+      <ion-input type="text" name="txTipoCarta" [(ngModel)]="newBarajaGwent.tipoCarta" required></ion-input>
+    </ion-item>
+
+    <!-- nivel de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">Nivel de la carta</ion-label>
+      <ion-input type="number" name="txNivelCarta" [(ngModel)]="newBarajaGwent.nivel" required></ion-input>
+    </ion-item>
+
+    <!-- costo de creacion de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">Costo de creacion de Carta</ion-label>
+      <ion-input type="number" name="txCostoCreacion" [(ngModel)]="newBarajaGwent.costoCreacion"required></ion-input>
+    </ion-item>
+
+    <!-- descripcion de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">descripcion</ion-label>
+      <ion-input type="text" name="txDescripcion" [(ngModel)]="newBarajaGwent.descripcion" required></ion-input>
+    </ion-item>
+
+    <!-- genero de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">Genero de la carta</ion-label>
+      <ion-input type="text" name="txGenero" [(ngModel)]="newBarajaGwent.genero" required></ion-input>
+    </ion-item>
+
+    <!-- habilidad de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">Habilidad de Carta</ion-label>
+      <ion-input type="text" name="txHabilidadCarta" [(ngModel)]="newBarajaGwent.habilidad" required></ion-input>
+    </ion-item>
+
+    <!-- disponible de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">disponible en</ion-label>
+      <ion-input type="text" name="txDisponibleCarta" [(ngModel)]="newBarajaGwent.disponible"required></ion-input>
+    </ion-item>
+
+    <!-- imagen de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">Imagen</ion-label>
+      <ion-input type="file" name="txImagenCarta" [(ngModel)]="newBarajaGwent.imagen" required></ion-input>
+    </ion-item>
+
+    <!-- tipo de carta -->
+    <ion-item lines="full">
+      <ion-label position="floating">Precio</ion-label>
+      <ion-input type="number" name="txPrecioCarta" [(ngModel)]="newBarajaGwent.precio" required></ion-input>
+    </ion-item>
+
+    <!-- boton de agregar datos -->
+    <ion-row>
+      <ion-col>
+        <ion-button (click)="crearBarajaNueva()" expand="block" color="success">Agregar</ion-button>
+      </ion-col>
+    </ion-row>
+
+
+
+  </form>
+</ion-content>
+
+-- agregar page.ts
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ApiGwentServiceService } from 'src/app/data/api-gwent-service.service';
+import { Baraja } from 'src/app/interfaces/baraja';
+
+@Component({
+  selector: 'app-agregar-gwent',
+  templateUrl: './agregar-gwent.page.html',
+  styleUrls: ['./agregar-gwent.page.scss'],
+})
+export class AgregarGwentPage implements OnInit {
+
+  newBarajaGwent:Baraja = {
+    nombre: "carta nueva",
+    tipoCarta: "tipo de carta nueva",
+    nivel: 0,
+    costoCreacion: 0,
+    descripcion: "nueva descripcion",
+    genero: "tipo de genero de color nuevo",
+    habilidad: "habilidad nueva",
+    disponible: "carta disponible",
+    imagen: "",
+    precio: 0
+  }
+
+  constructor(
+    private gwentserver: ApiGwentServiceService,
+    private router: Router,
+    ) { }
+
+  ngOnInit() {
+  }
+
+  crearBarajaNueva(){
+    this.gwentserver.crearBarajaNueva(this.newBarajaGwent).subscribe()
+    this.router.navigateByUrl("/lista-gwent")
+  }
+
+
+
+}
+
+-- detalle
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Informacion</ion-title>
+    <ion-buttons slot="end">
+      <ion-back-button [routerLink]="['/lista-gwent']">Volver</ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>ID #{{ gwentArray.id }}</ion-card-subtitle>
+      <ion-card-title>{{ gwentArray.imagen }}</ion-card-title>
+      <ion-card-title>{{ gwentArray.nombre }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>tipo de carta</p>
+      <strong>{{ gwentArray.tipoCarta }}</strong>
+      <p></p>
+      <p></p>
+      <p>Nivel de la carta</p>
+      <strong>{{ gwentArray.nivel }}</strong>
+      <p></p>
+      <p></p>
+      <p>costo de creacion</p>
+      <strong>{{ gwentArray.costoCreacion }}</strong>
+      <p></p>
+      <p></p>
+      <p>descripcion</p>
+      <strong>{{ gwentArray.descripcion}} </strong>
+      <p></p>
+      <p></p>
+      <p>Genero de la carta (color) </p>
+      <strong>{{ gwentArray.genero}}</strong>
+      <p></p>
+      <p></p>
+      <p>Habilidades</p>
+      <strong>{{ gwentArray.habilidad}}</strong>
+      <p></p>
+      <p></p>
+      <p>Carta Disponible</p>
+      <strong>{{ gwentArray.disponible}}</strong>
+      <p></p>
+      <p></p>
+      <p>Precio de la carta</p>
+      <strong>{{ gwentArray.precio}}</strong>
+    </ion-card-content>
+
+    <ion-button [routerLink]="['/actualizar-gwent', gwentArray.id]" color="warning"><ion-icon name="create"></ion-icon></ion-button>
+    <ion-button [routerLink]="['/eliminar-gwent', gwentArray.id]" color="danger"><ion-icon name="trash"></ion-icon></ion-button>
+  </ion-card>
+</ion-content>
+
+-- detalle page.ts
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ApiGwentServiceService } from 'src/app/data/api-gwent-service.service';
+
+@Component({
+  selector: 'app-detalle-gwent',
+  templateUrl: './detalle-gwent.page.html',
+  styleUrls: ['./detalle-gwent.page.scss'],
+})
+export class DetalleGwentPage {
+  ionViewWillEnter(){
+    this.GetGwentId(this.getIdFormURL())
+  }
+
+  gwentArray = {
+    id: 0,
+    nombre: "carta nueva",
+    tipoCarta: "tipo de carta nueva",
+    nivel: 0,
+    costoCreacion: 0,
+    descripcion: "nueva descripcion",
+    genero: "tipo de genero de color nuevo",
+    habilidad: "habilidad nueva",
+    disponible: "carta disponible",
+    imagen: "",
+    precio: 0
+  }
+
+
+  constructor(
+    private gwentserver: ApiGwentServiceService,
+    private router: Router
+    )
+  { }
+
+
+  getIdFormURL(){
+    let url = this.router.url
+    let array = url.split("/",3)
+    let id = parseInt(array[2])
+    return id
+  }
+
+  GetGwentId(gwentArray: number){
+    this.gwentserver.getCartaId(gwentArray).subscribe(
+      (respuestID: any) =>{
+        this.gwentArray = {
+          id: respuestID[0].id,
+          nombre: respuestID[0].nombre,
+          tipoCarta: respuestID[0].tipoCarta,
+          nivel: respuestID[0].nivel,
+          costoCreacion: respuestID[0].costoCreacion,
+          descripcion: respuestID[0].descripcion,
+          genero: respuestID[0].genero,
+          habilidad: respuestID[0].habilidad,
+          disponible: respuestID[0].disponible,
+          imagen: respuestID[0].imagen,
+          precio: respuestID[0].precio
+        }
+      }
+    )
+  }
+
+}
+
+-- eliminar
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Borrar Carta</ion-title>
+    <ion-buttons slot="end">
+      <ion-back-button [routerLink]="['/lista-gwent']">Volver</ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>ID #{{ gwentEli.id }}</ion-card-subtitle>
+      <ion-card-title>desea eliminar la carta: {{ gwentEli.nombre }} ?</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-button (click)="eliminarGwent()" expand="block" color="danger">Eliminar</ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+-- eliminar page.ts
+import { Component, OnInit } from '@angular/core';
+import { ApiGwentServiceService } from 'src/app/data/api-gwent-service.service';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-eliminar-gwent',
+  templateUrl: './eliminar-gwent.page.html',
+  styleUrls: ['./eliminar-gwent.page.scss'],
+})
+export class EliminarGwentPage  {
+
+  ionViewWillEnter(){
+    this.GetGwentId(this.getIdFormURL())
+  }
+
+  gwentEli = {
+    id: 0,
+    nombre: "",
+    tipoCarta: "",
+    nivel: 0,
+    costoCreacion: 0,
+    descripcion: "",
+    genero: "",
+    habilidad: "",
+    disponible: "",
+    imagen: "",
+    precio: 0
+  }
+
+  constructor(
+    private gwentserver: ApiGwentServiceService,
+    private router: Router
+  ) { }
+
+  getIdFormURL(){
+    let url = this.router.url
+    let array = url.split("/",3)
+    let id = parseInt(array[2])
+    return id
+  }
+
+  eliminarGwent(){
+    this.gwentserver.eliminarCartaGwentSuciaId(this.gwentEli).subscribe()
+    this.router.navigateByUrl("/lista-gwent")
+  }
+
+  GetGwentId(gwentDatoId: number){
+    this.gwentserver.getCartaId(gwentDatoId).subscribe(
+      (respuestID: any) =>{
+        this.gwentEli = {
+          id: respuestID[0].id,
+          nombre: respuestID[0].nombre,
+          tipoCarta: respuestID[0].tipoCarta,
+          nivel: respuestID[0].nivel,
+          costoCreacion: respuestID[0].costoCreacion,
+          descripcion: respuestID[0].descripcion,
+          genero: respuestID[0].genero,
+          habilidad: respuestID[0].habilidad,
+          disponible: respuestID[0].disponible,
+          imagen: respuestID[0].imagen,
+          precio: respuestID[0].precio
+        }
+      }
+    )
+  }
+
+}
+
+-- listar
+ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Barajas </ion-title>
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['/agregar-gwent']">Agregar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let g of barajas; let indeArray = index" [routerLink]="['/detalle-gwent', g.id]">
+      <ion-label>{{ g.nombre }}</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+-- listar page.ts
+import { Component, OnInit } from '@angular/core';
+import { InfiniteScrollCustomEvent, LoadingController } from '@ionic/angular';
+import { ApiGwentServiceService } from 'src/app/data/api-gwent-service.service';
+
+@Component({
+  selector: 'app-lista-gwent',
+  templateUrl: './lista-gwent.page.html',
+  styleUrls: ['./lista-gwent.page.scss'],
+})
+export class ListaGwentPage {
+
+  barajas = []
+
+  constructor(private barajaServicio: ApiGwentServiceService, private cargarControl: LoadingController) { }
+
+  ionViewWillEnter(){
+    this.cargarBarajas();
+  }
+
+  async cargarBarajas(carga?: InfiniteScrollCustomEvent){
+    const cargando =  await this.cargarControl.create({
+      message: "cargando cartas...",
+      spinner: "bubbles"
+    }
+    )
+    await cargando.present();
+
+    this.barajaServicio.listarCartasGwent().subscribe(
+      (respuesta) => { // respuesta tipo json
+        cargando.dismiss();
+        let listaString = JSON.stringify(respuesta)
+        this.barajas = JSON.parse(listaString)
+        carga?.target.complete();
+      },
+      (error) => {
+        console.log(error.message)
+        cargando.dismiss();
+      }
+    )
+  }
+
+}
+
+-- app.module.ts
+import { CarroCompraPageModule } from './pages/carro-compra/carro-compra.module';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouteReuseStrategy } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+
+import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { Splashscreen } from 'ionic-native';
+import { StatusBar } from 'ionic-native/dist/es5/plugins/statusbar';
+
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+
+@NgModule({
+  declarations: [AppComponent],
+  entryComponents: [],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, CarroCompraPageModule],
+  providers: [
+      StatusBar,
+      Splashscreen,
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+  ],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
+
+
+-- service
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { Baraja } from '../interfaces/baraja';
+import { BarajaGwent } from '../interfaces/baraja-gwent';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ApiGwentServiceService {
+
+  constructor(private http: HttpClient) { }
+
+  listarCartasGwent():Observable<BarajaGwent>{
+    return this.http.get<BarajaGwent>(`${environment.apiURL}/baraja`)
+  }
+
+  crearBarajaNueva(newBarajaGwent: Baraja):Observable<Baraja>{
+    return this.http.post<Baraja>(`${environment.apiURL}/baraja`, newBarajaGwent)
+  }
+
+  getCartaId(id: number):Observable<BarajaGwent>{
+    return this.http.get<BarajaGwent>(`${environment.apiURL}/baraja/?id=${id}`)
+  }
+
+  actualizarGwentCarta(gwentActu: any): Observable<BarajaGwent>{
+    return this.http.put<BarajaGwent>(`${environment.apiURL}/baraja/${gwentActu.id}`, gwentActu)
+  }
+
+  eliminarCartaGwentSuciaId(gwentEli: any):Observable<BarajaGwent>{
+    return this.http.delete<BarajaGwent>(`${environment.apiURL}/baraja/${gwentEli.id}`)
+  }
+}
+
+
+-- environments/environments.ts
+export const environment = {
+  production: false
+  apiURL: "http://localhost:0000.0000.0000.000"
+};
+
+-- carrito de compra
+ionic start shoppingCart blank
+cd ./shoppingCart
+
+ionic g page pages/cartModal
+ionic g service services/cart
+
+npm install animate.css
+
+-- src/global.scss
+@import '~animate.css/animate.min.css';
+
+.cart-modal {
+  --height: 50%;
+  --border-radius: 10px;
+  padding: 25px;
+}
+
+
+-- folder
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{ folder }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">{{ folder }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div id="container">
+    <strong class="capitalize">{{ folder }}</strong>
+    <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  </div>
+</ion-content>
+
+
+-- folder html
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>
+      Ionic Shopping
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-fab vertical="top" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="openCart()" #cart>
+      <div class="cart-length">{{ cartItemCount | async }}</div>
+      <ion-icon name="cart" class="cart-icon"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <ion-list>
+    <ion-card *ngFor="let p of products">
+      <ion-card-header>
+        <ion-card-title>{{ p.name }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-row class="ion-align-items-center">
+          <ion-col size="8">
+            <ion-label color="secondary">
+              <b>{{ p.price | currency:'USD' }}</b>
+            </ion-label>
+          </ion-col>
+          <ion-col size="4" class="ion-text-right">
+            <ion-button fill="clear" (click)="addToCart(p)">
+              <ion-icon name="add"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+</ion-content>
+
+
+
+-- parte que solo falta para terminar el codigo
+import { CartService } from './../services/cart.service';
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { CartModalPage } from '../pages/cart-modal/cart-modal.page';
+import { BehaviorSubject } from 'rxjs';
+
+@Component({
+  selector: 'app-home',
+  templateUrl: 'home.page.html',
+  styleUrls: ['home.page.scss']
+})
+export class HomePage {
+  cart = [];
+  products = [];
+  cartItemCount: BehaviorSubject<number>;
+
+  @ViewChild('cart', {static: false, read: ElementRef})fab: ElementRef;
+
+  constructor(private cartService: CartService, private modalCtrl: ModalController) {}
+
+  ngOnInit() {
+    this.products = this.cartService.getProducts();
+    this.cart = this.cartService.getCart();
+    this.cartItemCount = this.cartService.getCartItemCount();
+  }
+
+  addToCart(product) {
+    this.cartService.addProduct(product);
+    this.animateCSS('tada');
+  }
+
+  async openCart() {
+    this.animateCSS('bounceOutLeft', true);
+
+    let modal = await this.modalCtrl.create({
+      component: CartModalPage,
+      cssClass: 'cart-modal'
+    });
+    modal.onWillDismiss().then(() => {
+      this.fab.nativeElement.classList.remove('animated', 'bounceOutLeft')
+      this.animateCSS('bounceInLeft');
+    });
+    modal.present();
+  }
+
+  animateCSS(animationName, keepAnimated = false) {
+    const node = this.fab.nativeElement;
+    node.classList.add('animated', animationName)
+
+    //https://github.com/daneden/animate.css
+    function handleAnimationEnd() {
+      if (!keepAnimated) {
+        node.classList.remove('animated', animationName);
+      }
+      node.removeEventListener('animationend', handleAnimationEnd)
+    }
+    node.addEventListener('animationend', handleAnimationEnd)
+  }
+}
